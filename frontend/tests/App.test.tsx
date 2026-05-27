@@ -5,6 +5,7 @@ import App from "../src/App";
 
 // Mock API calls used by pages
 vi.mock("../src/lib/api", () => ({
+  getWeeklyReflection: vi.fn().mockResolvedValue(null),
   api: {
     stats: {
       daily: vi.fn().mockResolvedValue([]),
@@ -15,6 +16,9 @@ vi.mock("../src/lib/api", () => ({
       list: vi.fn().mockResolvedValue([]),
       create: vi.fn().mockResolvedValue({}),
       delete: vi.fn().mockResolvedValue(undefined),
+    },
+    reflection: {
+      weekly: vi.fn().mockResolvedValue(null),
     },
     tags: vi.fn().mockResolvedValue({ predefined: [], custom: [] }),
   },

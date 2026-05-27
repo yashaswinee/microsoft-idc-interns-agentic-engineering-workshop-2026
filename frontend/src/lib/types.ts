@@ -34,6 +34,43 @@ export interface HeatmapDay {
   count: number;
 }
 
+export interface ReflectionWindow {
+  start: string;
+  end: string;
+}
+
+export interface TrendInfo {
+  label: string;
+  slope: number | null;
+}
+
+export interface DayAverage {
+  date: string;
+  avg_mood: number;
+}
+
+export interface TagCount {
+  tag: string;
+  count: number;
+}
+
+export interface WeeklyReflection {
+  window: ReflectionWindow;
+  entry_count: number;
+  days_with_entries: number;
+  mode: string;
+  avg_mood: number | null;
+  avg_energy: number | null;
+  trend: TrendInfo;
+  best_day: DayAverage | null;
+  worst_day: DayAverage | null;
+  top_tags: TagCount[];
+  narrative: string | null;
+  suggestion: string | null;
+  reflection_prompt: string | null;
+  share_text: string | null;
+}
+
 export interface TagsResponse {
   predefined: string[];
   custom: string[];

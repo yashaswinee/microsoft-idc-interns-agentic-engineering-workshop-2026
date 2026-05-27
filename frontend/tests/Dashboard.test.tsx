@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import Dashboard from "../src/pages/Dashboard";
 
 vi.mock("../src/lib/api", () => ({
+  getWeeklyReflection: vi.fn().mockResolvedValue(null),
   api: {
     stats: {
       daily: vi.fn().mockResolvedValue([]),
@@ -11,6 +12,9 @@ vi.mock("../src/lib/api", () => ({
     },
     entries: {
       list: vi.fn().mockResolvedValue([]),
+    },
+    reflection: {
+      weekly: vi.fn().mockResolvedValue(null),
     },
   },
 }));

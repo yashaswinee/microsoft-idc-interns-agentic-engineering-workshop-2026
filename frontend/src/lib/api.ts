@@ -4,6 +4,7 @@ import type {
   EntryCreate,
   HeatmapDay,
   TagsResponse,
+  WeeklyReflection,
   WeeklyStat,
 } from "./types";
 
@@ -44,5 +45,10 @@ export const api = {
     weekly: () => request<WeeklyStat[]>("/stats/weekly"),
     heatmap: () => request<HeatmapDay[]>("/stats/heatmap"),
   },
+  reflection: {
+    weekly: () => request<WeeklyReflection>("/reflection/weekly"),
+  },
   tags: () => request<TagsResponse>("/tags"),
 };
+
+export const getWeeklyReflection = () => api.reflection.weekly();

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import CalendarHeatmap from "../components/CalendarHeatmap";
 import EntryCard from "../components/EntryCard";
 import TimelineChart from "../components/TimelineChart";
+import WeeklyReflectionCard from "../components/WeeklyReflectionCard";
 import { api } from "../lib/api";
 import type { DailyStat, Entry, HeatmapDay } from "../lib/types";
 import { MOOD_EMOJIS } from "../lib/types";
@@ -52,6 +53,9 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
+      {/* Weekly reflection digest (mounted above existing content) */}
+      <WeeklyReflectionCard />
+
       {/* Page header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
