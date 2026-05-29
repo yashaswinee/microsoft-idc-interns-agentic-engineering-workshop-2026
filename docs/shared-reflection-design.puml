@@ -1,0 +1,32 @@
+@startuml
+title Shareable Weekly Reflection — Flow
+
+actor Owner
+participant "Frontend\n(WeeklyReflectionCard)" as FE
+participant "FastAPI Backend" as API
+database "shared_reflections.json" as FS
+actor Recipient
+participant "SharedReflection page" as V
+
+Owner -> FE : Click "Share link"
+FE -> API : POST /api/reflection/share
+API -> API : build_weekly_reflection(entries, now)
+API -> API : id = uuid4().hex[:10]
+API -> FS : write {id: {created_at, reflection}}
+API --> FE : 200 {"id": "37d9449cf0"}
+FE -> FE : clipboard.writeText(origin + "/shared/" + id)
+FE --> Owner : "Link copied!"
+
+Owner -> Recipient : Send URL
+Recipient -> V : Open /shared/:id
+V -> API : GET /api/shared/{id}
+API -> FS : lookup by id
+alt snapshot found
+  FS --> API : record
+  API --> V : 200 WeeklyReflection (frozen)
+  V --> Recipient : Render read-only digest
+else missing
+  API --> V : 404
+  V --> Recipient : "Not found"
+end
+@enduml

@@ -47,8 +47,15 @@ export const api = {
   },
   reflection: {
     weekly: () => request<WeeklyReflection>("/reflection/weekly"),
+    share: () =>
+      request<{ id: string }>("/reflection/share", { method: "POST" }),
+  },
+  shared: {
+    get: (id: string) => request<WeeklyReflection>(`/shared/${id}`),
   },
   tags: () => request<TagsResponse>("/tags"),
 };
 
 export const getWeeklyReflection = () => api.reflection.weekly();
+export const createShareLink = () => api.reflection.share();
+export const getSharedReflection = (id: string) => api.shared.get(id);

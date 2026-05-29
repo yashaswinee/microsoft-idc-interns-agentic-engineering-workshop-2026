@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { getWeeklyReflection } from "../lib/api";
+import { createShareLink, getWeeklyReflection } from "../lib/api";
 import type { WeeklyReflection } from "../lib/types";
 
 const TREND_WORDS: Record<string, string> = {
@@ -14,6 +14,8 @@ export default function WeeklyReflectionCard() {
   const [data, setData] = useState<WeeklyReflection | null>(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
+  const [sharing, setSharing] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -56,6 +58,23 @@ export default function WeeklyReflectionCard() {
     }
   };
 
+  const handleShareLink = async () => {
+    setSharing(true);
+    try {
+      const { id } = await createShareLink();
+      const url = `${window.location.origin}/shared/${id}`;
+      try {
+        await navigator.clipboard.writeText(url);
+      } catch {
+        // ignore clipboard failures
+      }
+      setLinkCopied(true);
+      window.setTimeout(() => setLinkCopied(false), 3000);
+    } finally {
+      setSharing(false);
+    }
+  };
+
   const trendWord = TREND_WORDS[data.trend.label] ?? data.trend.label;
   const isTough = data.mode === "tough";
   const cardClassName = isTough
@@ -78,13 +97,23 @@ export default function WeeklyReflectionCard() {
           </p>
         </div>
         {data.share_text && (
-          <button
-            type="button"
-            onClick={handleCopy}
-            className="text-xs px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors cursor-pointer"
-          >
-            {copied ? "Copied!" : "Copy summary"}
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={handleCopy}
+              className="text-xs px-3 py-1.5 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors cursor-pointer"
+            >
+              {copied ? "Copied!" : "Copy summary"}
+            </button>
+            <button
+              type="button"
+              onClick={handleShareLink}
+              disabled={sharing}
+              className="text-xs px-3 py-1.5 rounded-full border border-pulse-200 bg-pulse-50 text-pulse-700 hover:bg-pulse-100 transition-colors cursor-pointer disabled:opacity-50"
+            >
+              {linkCopied ? "Link copied!" : sharing ? "Sharing…" : "Share link"}
+            </button>
+          </div>
         )}
       </header>
 
